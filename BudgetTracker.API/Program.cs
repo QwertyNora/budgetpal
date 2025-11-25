@@ -6,6 +6,7 @@ using BudgetTracker.Infrastructure.Repositories;
 using BudgetTracker.Application.Interfaces;
 using BudgetTracker.Application.Services;
 using BudgetTracker.API.Middleware;
+using BudgetTracker.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,11 +43,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Initialize database
+app.InitializeDatabase();
+
 // Global exception handler middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
